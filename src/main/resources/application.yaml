@@ -1,0 +1,29 @@
+server:
+  port: 8070
+  http2:
+    enabled: true
+
+app:
+  couchbase:
+    connection-string: couchbase://localhost
+    user-name: Administrator
+    password: password
+    bucketName: cedar-policy
+    scopeName: dev
+
+spring:
+  application:
+    name: cedar-agent
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+    default-property-inclusion: NON_NULL
+  webflux:
+    base-path: /api/cedar-agent
+
+#logging:
+#  level:
+#    org.springframework.data.couchbase.core: TRACE

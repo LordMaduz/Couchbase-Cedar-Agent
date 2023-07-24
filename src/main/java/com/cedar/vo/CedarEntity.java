@@ -11,6 +11,6 @@ import java.util.Map;
 public class CedarEntity {
 
     private CedarUid uid;
-    private Map<String, Value> attrs;
+    private Map<String, Object> attrs;
     private List<CedarUid> parents;
 }

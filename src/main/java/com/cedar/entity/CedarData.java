@@ -27,5 +27,4 @@ public class CedarData {
     @GeneratedValue(strategy = GenerationStrategy.UNIQUE)
     private String id;
     private List<CedarEntity> input;
-    private Set<Entity> cedarData;
 }

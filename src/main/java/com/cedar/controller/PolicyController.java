@@ -21,10 +21,10 @@ public class PolicyController {
         return policyMono.flatMap(policyVo -> policyService.createPolicy(policyVo.getPolicy(), policyVo.getServiceId()));
     }
 
-    @GetMapping("/{serviceId}")
-    Flux<CedarPolicy> getPolicies(@PathVariable final String serviceId){
-        return policyService.getPoliciesByServiceId(serviceId);
-    }
+//    @GetMapping("/{serviceId}")
+//    Flux<CedarPolicy> getPolicies(@PathVariable final String serviceId){
+//        return policyService.getPoliciesByServiceId(serviceId);
+//    }
 
     @GetMapping("/{id}")
     Mono<CedarPolicy> getPolicyById(@PathVariable final String id){

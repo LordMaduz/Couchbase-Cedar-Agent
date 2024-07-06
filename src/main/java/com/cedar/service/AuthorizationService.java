@@ -110,8 +110,8 @@ public class AuthorizationService {
         final Set<String> parents = new HashSet<>();
         parentCedar.forEach(input -> {
             parents.add(generateUid(input.getType(), input.getId()));
-            entitySet.add(new Entity(generateUid(cedar.getUid().getType(), cedar.getUid().getId()), getAttributes(cedar.getAttrs()), parents));
         });
+        entitySet.add(new Entity(generateUid(cedar.getUid().getType(), cedar.getUid().getId()), getAttributes(cedar.getAttrs()), parents));
     }
 
     public Map<String, Value> getAttributes(Map<String, Object> attributeMap) {

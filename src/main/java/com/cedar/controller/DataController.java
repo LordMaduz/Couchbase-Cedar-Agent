@@ -17,9 +17,9 @@ public class DataController {
 
     private final DataService dataService;
 
-    @PostMapping("/{id}")
-    public Mono<CedarData> createCedarEntity(@RequestBody final Mono<List<CedarEntity>> cedarEntityList, @PathVariable final String id) {
-        return cedarEntityList.flatMap(data -> dataService.createCedarEntity(data, id));
+    @PostMapping("/{serviceId}")
+    public Mono<CedarData> createCedarEntity(@RequestBody final Mono<List<CedarEntity>> cedarEntityList, @PathVariable final String serviceId) {
+        return cedarEntityList.flatMap(data -> dataService.createCedarEntity(data, serviceId));
     }
 
     @PutMapping("/{id}")

@@ -16,10 +16,10 @@ public class DataService {
 
     private final DataRepository dataRepository;
 
-    public Mono<CedarData> createCedarEntity(final List<CedarEntity> cedarEntityList, final String id) {
+    public Mono<CedarData> createCedarEntity(final List<CedarEntity> cedarEntityList, final String serviceId) {
 
         final CedarData cedarData = CedarData.builder()
-                .id(id)
+                .serviceId(serviceId)
                 .input(cedarEntityList)
                 .build();
 

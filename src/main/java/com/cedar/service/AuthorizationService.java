@@ -43,7 +43,7 @@ public class AuthorizationService {
     public Mono<AuthorizationResult> authorize(final String securityGroup, final String serviceId,
                                                final String actionId, final String resourceId, Map<String, Value> context) {
 
-        return dataRepository.findById(serviceId).flatMap(data -> {
+        return dataRepository.findByServiceId(serviceId).flatMap(data -> {
             AtomicReference<AuthorizationResult> authorize = new AtomicReference<>();
             return policyRepository.findByServiceId(serviceId).collectList().flatMap(policyList -> {
 

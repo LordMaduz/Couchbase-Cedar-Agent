@@ -2,7 +2,7 @@
 
 > Reactive authorization service implementing AWS Cedar policy language for fine-grained access control with Apache APISIX integration and Couchbase backend.
 
-## 🎯 Overview
+## Overview
 
 A production-ready authorization agent built with AWS Cedar policy language, providing centralized policy-based access control for microservices. Features dynamic policy evaluation, entity relationship management, and column-level data filtering with seamless Apache APISIX gateway integration.
 
@@ -18,7 +18,7 @@ A production-ready authorization agent built with AWS Cedar policy language, pro
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 <img width="1043" height="2023" alt="Mermaid Chart - Create complex, visual diagrams with text -2025-10-14-103426" src="https://github.com/user-attachments/assets/44e1a1b9-e864-4384-9fe4-f1eb071dce18" />
 
 ---
@@ -113,7 +113,7 @@ Application starts on `http://localhost:8070`
 
 ---
 
-## 🔧 API Usage
+## API Usage
 
 ### 1. Create Policy
 

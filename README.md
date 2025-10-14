@@ -19,41 +19,12 @@ A production-ready authorization agent built with AWS Cedar policy language, pro
 ---
 
 ## 🏗️ Architecture
-```
-%%{init: {'theme':'base', 'themeVariables': { 'fontSize':'12px'}}}%%
-graph TB
-subgraph Client["Client Applications"]
-APP[Application]
-endsubgraph Gateway["Apache APISIX"]
-    APISIX[APISIX Gateway]
-    CEDAR_PLUGIN[Cedar Plugin<br/>cedar.lua]
-endsubgraph Agent["Cedar Agent :8070"]
-    API[Authorization API]
-    ENGINE[Cedar Engine]
-    POLICY[Policy Service]
-    DATA[Data Service]
-    COLUMN[Column Mapping]
-endsubgraph Storage["Couchbase Database"]
-    CB[(cedar-policy bucket)]
-    P_COLL[CedarPolicy<br/>collection]
-    D_COLL[CedarData<br/>collection]
-    C_COLL[ColumnMapping<br/>collection]
-endAPP -->|HTTP Request| APISIX
-APISIX --> CEDAR_PLUGIN
-CEDAR_PLUGIN -->|POST /authorize| APIAPI --> ENGINE
-ENGINE --> POLICY
-ENGINE --> DATA
-ENGINE --> COLUMNPOLICY --> P_COLL
-DATA --> D_COLL
-COLUMN --> C_COLLP_COLL --> CB
-D_COLL --> CB
-C_COLL --> CBAPI -->|Allow/Deny| CEDAR_PLUGIN
-CEDAR_PLUGIN -->|Response| APPstyle Client fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-style Gateway fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-style Agent fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-style Storage fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-```
+<img width="1043" height="2023" alt="Mermaid Chart - Create complex, visual diagrams with text -2025-10-14-103426" src="https://github.com/user-attachments/assets/44e1a1b9-e864-4384-9fe4-f1eb071dce18" />
+
 ---
+
+## Authorization Flow
+<img width="2276" height="2448" alt="Mermaid Chart - Create complex, visual diagrams with text -2025-10-14-103257" src="https://github.com/user-attachments/assets/e060b0de-b7fc-44fc-8a70-fc6b607dd99d" />
 
 ## Tech Stack
 
@@ -186,3 +157,4 @@ curl -X POST http://localhost:8070/api/cedar-agent/authorize \
   -H "action-id: ViewTrade" \
   -H "resource-id: TradeCollection"
 ```
+

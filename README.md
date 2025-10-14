@@ -158,3 +158,136 @@ curl -X POST http://localhost:8070/api/cedar-agent/authorize \
   -H "resource-id: TradeCollection"
 ```
 
+## Key Features
+
+### Cedar Authorization Engine
+
+Evaluates policies using AWS Cedar engine:
+```java
+@Service
+public class AuthorizationService {
+    
+    private final AuthorizationEngine authorizationEngine = new WrapperAuthorizationEngine();
+
+    public Mono authorize(String securityGroup, String serviceId,
+                                       String actionId, String resourceId,
+                                       String context, String dataObject,
+                                       boolean isColumnLevelValidation) {
+        
+        // Load policies from database
+        return policyRepository.findByServiceId(serviceId)
+            .collectList()
+            .flatMap(policies -> {
+                
+                // Load entity data
+                Set entities = generateEntitySet(entityList);
+                Set policySet = convertToCedarPolicies(policies);
+                
+                BasicSlice slice = new BasicSlice(policySet, entities);
+                
+                // Create authorization query
+                AuthorizationQuery query = new AuthorizationQuery(
+                    Optional.of(principalUid),
+                    actionUid,
+                    Optional.of(resourceUid),
+                    contextMap,
+                    Optional.empty()
+                );
+                
+                // Evaluate
+                AuthorizationResult result = authorizationEngine.isAuthorized(query, slice);
+                
+                return Mono.just(buildResponse(result));
+            });
+    }
+}
+```
+
+### Policy Syntax
+
+Cedar policies use a declarative syntax:
+```cedar
+permit(
+  principal in AuthorizationGroup::"Authorization",
+  action == Action::"ViewTrade",
+  resource == Collection::"TradeCollection"
+)
+when {
+  resource.allowedUsers.contains(principal.id)
+};
+```
+
+### Apache APISIX Plugin
+
+Custom Lua plugin for gateway integration:
+```lua
+-- custom-plugins/cedar.lua
+function _M.access(conf, ctx)
+    local request_header = core.request.headers(ctx)
+    request_header["Content-Type"] = "application/json"
+    request_header["service-id"] = conf.service
+
+    local endpoint = conf.host .. "/api/cedar-agent/authorize"
+    local res, err = httpc:request_uri(endpoint, params)
+
+    -- Parse decision
+    local data = core.json.decode(res.body)
+    
+    if not data.result.allow then
+        return 403, data.result.reason
+    end
+end
+```
+
+**APISIX Route Configuration:**
+```yaml
+routes:
+  - uri: /api/trade/*
+    plugins:
+      cedar:
+        host: http://localhost:8070
+        service: TradeService
+        ssl_verify: false
+```
+
+## Policy Examples
+
+### Basic Permission
+```cedar
+permit(
+  principal == SecurityGroup::"TMOP_SG_ADMIN",
+  action == Action::"View",
+  resource == Service::"TradeService"
+);
+```
+
+### Attribute-Based Access Control (ABAC)
+```cedar
+permit(
+  principal in AuthorizationGroup::"Authorization",
+  action == Action::"ViewTrade",
+  resource == Collection::"TradeCollection"
+)
+when {
+  resource.allowedUsers.contains(principal.id)
+};
+```
+
+### Context-Based Authorization
+```cedar
+permit(
+  principal in ServiceGroup::"Service",
+  action,
+  resource
+)
+when {
+  context.authorised == true
+};
+```
+## 📖 Learn More
+
+For comprehensive guides on policy-based authorization and Cedar implementation:
+
+**[Implementing Fine-Grained Authorization with AWS Cedar](https://blog.stackademic.com/a-look-in-to-aws-cedar-policy-language-1ac978ad5042)**
+
+
